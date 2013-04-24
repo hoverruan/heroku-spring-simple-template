@@ -8,7 +8,7 @@
 		<constructor-arg value="${DATABASE_URL}"/>
 	</bean>
 	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
-		<property name="driverClassName" value="${database.url}"/>
+		<property name="driverClassName" value="${database.driver}"/>
 		<property name="url"
 		          value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() +':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
 		<property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
