@@ -1,6 +1,6 @@
 package com.github.hoverruan.spring.template.jpamvc.core;
 
-import org.hibernate.dialect.H2Dialect;
+import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,8 @@ public class JpaConfiguration {
     @Bean
     public Map<String, Object> jpaProperties() {
         Map<String, Object> props = new HashMap<String, Object>();
-        props.put("hibernate.dialect", H2Dialect.class.getName());
+        props.put("hibernate.dialect", PostgreSQL82Dialect.class.getName());
+        props.put("hibernate.connection.charSet", "UTF-8");
 
         return props;
     }
@@ -32,7 +33,7 @@ public class JpaConfiguration {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setShowSql(false);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setDatabase(Database.H2);
+        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
         return hibernateJpaVendorAdapter;
     }
 

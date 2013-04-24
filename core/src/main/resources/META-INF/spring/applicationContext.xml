@@ -3,18 +3,23 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:property-placeholder location="classpath*:META-INF/spring/*.properties"/>
+	<bean class="java.net.URI" id="dbUrl">
+		<constructor-arg value="${DATABASE_URL}"/>
+	</bean>
 	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/quickstart?useUnicode=yes&amp;characterEncoding=UTF-8"/>
-		<property name="username" value="root"/>
-		<property name="password" value=""/>
+		<property name="driverClassName" value="${database.url}"/>
+		<property name="url"
+		          value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() +':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+		<property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+		<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
 		<property name="testOnBorrow" value="true"/>
 		<property name="testOnReturn" value="true"/>
 		<property name="testWhileIdle" value="true"/>
 		<property name="timeBetweenEvictionRunsMillis" value="1800000"/>
 		<property name="numTestsPerEvictionRun" value="3"/>
 		<property name="minEvictableIdleTimeMillis" value="1800000"/>
-		<property name="validationQuery" value="SELECT 1"/>
+		<property name="validationQuery" value="SELECT version();"/>
 	</bean>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
